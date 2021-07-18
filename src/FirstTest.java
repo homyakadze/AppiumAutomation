@@ -11,6 +11,7 @@ public class FirstTest {
 
     private AppiumDriver driver;
 
+    //Первый тест, запуск на реальном Nexus 5
     @Before
     public void setUp() throws Exception
     {
@@ -38,6 +39,7 @@ public class FirstTest {
     {
         System.out.println("First test run");
     }
+
 }
 
 
