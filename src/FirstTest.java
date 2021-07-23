@@ -46,7 +46,7 @@ public class FirstTest
 
     //Тест проверки наличия определеного результата в выжаче поиска по ключевому слову Java
 
-    @Test
+ /*  *//* @Test
     public void testForSearch()
     {
         waitForElementAndClick(
@@ -181,14 +181,6 @@ public class FirstTest
     }
 
 
-    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
-        element.sendKeys(value);
-        return element;
-    }
-
-
     private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -199,12 +191,48 @@ public class FirstTest
     }
 
 
-    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInseconds)
+    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementPresent(by, error_message, timeoutInseconds);
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
     }
+
+    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        element.sendKeys(value);
+        return element;
+    }*/
+
+
+    //Домашняя работа к 3 занятию
+
+    //Тест, который проверяет, что поле ввода для поиска статьи содержит текст Search Wikipedia
+
+    @Test
+    public void testInputSearchContainsText()
+    {
+        assertElementHasText(
+                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Search Wikipedia",
+                "The search input doesn't contain the specified text",
+                5
+        );
+    }
+
+    //Метод, который проверяет наличие ожидаемого текста у элемента
+
+    private boolean assertElementHasText(By by, String value, String error_message, long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(
+                ExpectedConditions.textToBePresentInElementLocated(by, value)
+        );
+    }
+
+    //Конец домашнего задания к 3 занятию
 
 }
 
