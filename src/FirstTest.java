@@ -1,4 +1,5 @@
 import lib.CoreTestCase;
+import lib.UI.ArticlePageObject;
 import lib.UI.MainPageObject;
 import lib.UI.SearchPageObject;
 import org.junit.Assert;
@@ -6,6 +7,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
+
+import javax.naming.ldap.LdapReferralException;
 
 public class FirstTest extends CoreTestCase {
 
@@ -46,36 +49,20 @@ public class FirstTest extends CoreTestCase {
     //Конец теста 2
 
 
-    //Тест сравнения ожидаемой статьи
+    // 3 Тест сравнения ожидаемой статьи
 
     @Test
-    public void testCompareArticleTitle() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-                "Cannot find Search Wikipedia input",
-                5
-        );
+    public void testCompareArticleTitle()
+    {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot find search input",
-                5
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                "Cannot find Search Wikipedia input",
-                5
-        );
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
 
-        WebElement title_element = MainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot fint article title",
-                15
-        );
-
-        String article_title = title_element.getAttribute(("text"));
+        String article_title = ArticlePageObject.getArticleTitle();
 
         Assert.assertEquals(
                 "We see unexpected title",
@@ -83,49 +70,28 @@ public class FirstTest extends CoreTestCase {
                 article_title
         );
     }
-    //Конец теста
+    //Конец теста 3
 
 
-    //Тест свайпа статьи
+    // 4 Тест свайпа статьи
 
     @Test
-    public void testSwipeArticle() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-                "Cannot find Search Wikipedia input",
-                5
-        );
+    public void testSwipeArticle()
+    {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Appium",
-                "Cannot find search input",
-                5
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Appium");
+        SearchPageObject.clickByArticleWithSubstring("Appium");
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Appium']"),
-                "Cannot find Search Wikipedia input",
-                5
-        );
-
-        MainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot fint article title",
-                15
-        );
-
-        MainPageObject.swipeUpToFindElement(
-                By.xpath("//*[@text='View page in browser']"),
-                "Cannot find the end of the artile",
-                20
-        );
-
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.swipeToFooter();
     }
-    //Конец теста свайпа статьи
+    //Конец теста 4 свайпа статьи
 
 
-    //Тест сохранения статьи, открытия списка и удаления статьи из списка
+    // 5 Тест сохранения статьи, открытия списка и удаления статьи из списка
 
     @Test
     public void testSaveFirstArticleToMyList() {
