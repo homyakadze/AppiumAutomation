@@ -1,5 +1,6 @@
 import lib.CoreTestCase;
 import lib.UI.MainPageObject;
+import lib.UI.SearchPageObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -16,31 +17,17 @@ public class FirstTest extends CoreTestCase {
         MainPageObject = new MainPageObject(driver);
     }
 
-    //Тест проверки наличия определеного результата в выжаче поиска по ключевому слову Java
+    // 1 Тест проверки наличия определеного результата в выжаче поиска по ключевому слову Java
 
     @Test
-    public void testSearch() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-                "Cannot find Search Wikipedia input",
-                5
-        );
-
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot find search input",
-                5
-        );
-
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                "Cannot find 'Object-oriented programming language' topic searching by 'Java'",
-                10
-        );
-
+    public void testSearch()
+    {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
     }
-    //Конец теста
+    //Конец теста 1
 
 
     //Тест проверки отмены поиска
