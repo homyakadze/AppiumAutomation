@@ -451,6 +451,41 @@ public class FirstTest
     //Конец теста смены ротации на результате поиска
 
 
+    //Тест ухода и возврата из бэкграунда
+
+    @Test
+    public void testSearchArticleInBackground()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find Search Wikipedia input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find Search Wikipedia input",
+                5
+        );
+
+        driver.runAppInBackground(5);
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find article after returning from background",
+                2
+        );
+
+    }
+
+    //Конец теста ухода и возврата из бэкграунда
 
     //Методы
 
