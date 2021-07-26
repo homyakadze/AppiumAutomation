@@ -30,42 +30,20 @@ public class FirstTest extends CoreTestCase {
     //Конец теста 1
 
 
-    //Тест проверки отмены поиска
+    // 2 Тест проверки отмены поиска
 
     @Test
-    public void testCancelSearch() {
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find 'Search Wikipedia' input",
-                5
-        );
+    public void testCancelSearch()
+    {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot find search input",
-                5
-        );
-
-        MainPageObject.waitForElementAndClear(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Cannot find search field",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot find X to cancel search",
-                5
-        );
-
-        MainPageObject.waitForElementNotPresent(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "X is still present on the page",
-                5
-        );
+        SearchPageObject.initSearchInput();
+        //SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForCancelButtonToAppear();
+        SearchPageObject.clickCancelSearcg();
+        SearchPageObject.waitForCancelButtonToDisappear();
     }
-    //Конец теста
+    //Конец теста 2
 
 
     //Тест сравнения ожидаемой статьи
