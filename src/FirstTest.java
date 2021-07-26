@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest
 {
@@ -46,7 +47,7 @@ public class FirstTest
 
     //Тест проверки наличия определеного результата в выжаче поиска по ключевому слову Java
 
- /*  *//* @Test
+    @Test
     public void testForSearch()
     {
         waitForElementAndClick(
@@ -203,7 +204,7 @@ public class FirstTest
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.sendKeys(value);
         return element;
-    }*/
+    }
 
 
     //Домашняя работа к 3 занятию
@@ -232,7 +233,65 @@ public class FirstTest
         );
     }
 
-    //Конец домашнего задания к 3 занятию
+
+    //Домашнее задание EX3
+
+    //Тест, который ищет слово, убеждается, что найдено несколько статей и отменяет поиск
+
+    @Test
+    public void testCancelSearchFewResults()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "ivideon",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']"),
+                "Can not find Ivideon",
+                10
+        );
+
+        int count_search_results = countElements(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']")
+                );
+
+        Assert.assertTrue(
+                "No results found",
+                count_search_results > 0
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find X to cancel search",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']"),
+                "Search results is still present on the page",
+                5
+        );
+
+    }
+
+
+    //Метод, вычисляющий количество элементов. Остальные методы используются из числа существующих (листинг занятий)
+    private int countElements(By by)
+    {
+        List elements = driver.findElements(by);
+        return elements.size();
+    }
+
+    //Конец домашнего задания к EX3
 
 }
 
