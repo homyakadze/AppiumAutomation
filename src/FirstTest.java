@@ -229,13 +229,14 @@ public class FirstTest
             waitForElementAndClick(
                     By.xpath("//android.widget.ImageView[@content-desc='More options']"),
                     "Cannot find button to open article option",
-                    5
+                    10
             );
 
+
             waitForElementAndClick(
-                    By.xpath("//*[@resource-id='org.wikipedia:id/title']/*[@text='Add to reading list']"),
+                    By.xpath("//*[@text='Add to reading list']"),
                     "Cannot find options to add article to reading list",
-                    5
+                    10
             );
 
             waitForElementAndClick(
