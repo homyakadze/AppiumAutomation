@@ -11,8 +11,8 @@ public class SearchPageObject extends MainPageObject{
             SEATCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
-
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
+            SEARCH_NORESULT_ELEMENT = "//*[@text='Search and read the free encyclopedia in your language']";
 
     public SearchPageObject(AppiumDriver driver)
     {
@@ -39,10 +39,10 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForCancelButtonToDisappear()
     {
-        this.waitForElementNotPresent(By.id(SEATCH_CANCEL_BUTTON), "Search cancel button is still present", 5);
+        this.waitForElementNotPresent(By.id(SEATCH_CANCEL_BUTTON), "Search cancel button is still present", 10);
     }
 
-    public void clickCancelSearcg()
+    public void clickCancelSearch()
     {
         this.waitForElementAndClick(By.id(SEATCH_CANCEL_BUTTON), "Cannot find and click search cancel button", 5);
     }
@@ -61,24 +61,27 @@ public class SearchPageObject extends MainPageObject{
     public void clickByArticleWithSubstring(String substring)
     {
         String search_result_xpath = getResultSearchElement(substring);
-        this.waitForElementAndClick(By.xpath(search_result_xpath), "Cannot find and click seatch result with substring " + substring, 10);
+        this.waitForElementAndClick(By.xpath(search_result_xpath), "Cannot find and click seatch result with substring " + substring, 5);
     }
 
     public int getAmountOfFoundArticle()
     {
-        String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
-
         this.waitForElementPresent(
                 By.xpath(SEARCH_RESULT_ELEMENT),
                 "Cannot find anything by the request",
-                15
+                10
         );
         return this.getAmountElements(By.xpath(SEARCH_RESULT_ELEMENT));
     }
 
     public void waitForEmptyResultsLabel()
     {
-        this.waitForElementPresent(By.xpath(SEARCH_EMPTY_RESULT_ELEMENT),"Cannot find empty result element",15);
+        this.waitForElementPresent(By.xpath(SEARCH_EMPTY_RESULT_ELEMENT),"Cannot find empty result element",10);
+    }
+
+    public void waitForNoResultsLabel()
+    {
+        this.waitForElementPresent(By.xpath(SEARCH_NORESULT_ELEMENT),"Cannot find empty result element",10);
     }
 
     public void assertThereIsNoResultOfSearch()

@@ -1,8 +1,12 @@
 package lib.UI;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
+
 
 public class ArticlePageObject extends MainPageObject
 {
@@ -31,6 +35,15 @@ public class ArticlePageObject extends MainPageObject
     {
         WebElement title_element = waitForTitleElement();
         return title_element.getAttribute("text");
+    }
+
+    //Метод assertElementPresent для Ex6 задания рефакторинга (Ex8)
+    public void assertElementPresent()
+    {
+        List elements = driver.findElements(By.id(TITLE));
+        Assert.assertTrue(
+                "The article has no title",
+                elements.size() == 1);
     }
 
     public void swipeToFooter()
