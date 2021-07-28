@@ -2,6 +2,7 @@ package lib.UI;
 
 import io.appium.java_client.AppiumDriver;
 import org.junit.Assert;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -9,15 +10,17 @@ import java.util.List;
 
 public class ArticlePageObject extends MainPageObject
 {
-    private static  final String
-            FOOTER_ELEMENET = "xpath://*[@text='View page in browser']",
-            TITLE = "id:org.wikipedia:id/view_page_title_text",
-            OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-            OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
-            ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-            MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-            MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']";
+    protected static String
+    FOOTER_ELEMENET = "xpath://*[@text='View page in browser']",
+    TITLE = "id:org.wikipedia:id/view_page_title_text",
+    OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
+    OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
+    ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
+    MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
+    MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
+    CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
+    OPTIONS_REMOVE_FROM_MY_LIST_BUTTON;
+
 
 
     public ArticlePageObject(AppiumDriver driver)
@@ -33,7 +36,14 @@ public class ArticlePageObject extends MainPageObject
     public String getArticleTitle()
     {
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        if (Platform.getInstance().isAndroid()){
+            return title_element.getAttribute("text");
+        } else if (Platform.getInstance().isIOS()){
+            return title_element.getAttribute("name");
+        } else {
+            return title_element.getText();
+        }
+
     }
 
     //Метод assertElementPresent для Ex6 задания рефакторинга (Ex8)
@@ -96,10 +106,34 @@ public class ArticlePageObject extends MainPageObject
 
     public void closeArticle()
     {
+        if (Platform.getInstance().isAndroid() || Platform.getInstance.isIOS()){
+            this.waitForElementAndClick(
+                    CLOSE_ARTICLE_BUTTON,
+                    "Cannot close article, cannot find X link",
+                    5
+            );
+        }
+            ArticlePageObject.addArticlesToMySaved(name_of_folder);
+        } else {
         this.waitForElementAndClick(
                 CLOSE_ARTICLE_BUTTON,
                 "Cannot close article, cannot find X link",
                 5
         );
     }
-}
+
+    public void addArticlesToMySaved()
+    {
+        if (Platform.getInstance().isMW()){
+            this.removeArticlesToMySavedIfItAdded();
+        }
+        this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Cannot find option to add article to reading list");
+    }
+
+    public void removeArticlesToMySavedIfItAdded()
+    {
+        if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)){
+            this.waitForElementAndClick(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON, "Cannot click button to remove an article from saver", 5);
+            this.waitForElementPresent(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Cannot find button to add an article to saved list after removing it from this list before", 5);
+
+        }
